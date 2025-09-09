@@ -1,1 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karai-Karai Translator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Montserrat', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .card { border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); border: none; }
+        .result-box { background: #f8f9fa; border-radius: 10px; padding: 20px; margin-top: 20px; min-height: 80px; }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4><i class="bi bi-translate me-2"></i>Karai-Karai Translator</h4>
+                        <p class="mb-0">Bidirectional Translation: Karai-Karai ↔ English</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-center mb-3">
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="direction" id="karai_to_english" value="karai_to_english" checked>
+                                    <label class="btn btn-outline-primary" for="karai_to_english">Karai → English</label>
+                                    <button type="button" class="btn btn-primary" onclick="switchLanguages()">⇄</button>
+                                    <input type="radio" class="btn-check" name="direction" id="english_to_karai" value="english_to_karai">
+                                    <label class="btn btn-outline-primary" for="english_to_karai">English → Karai</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="inputText" class="form-label fw-semibold" id="inputLabel">Enter Karai-Karai Text:</label>
+                            <textarea id="inputText" class="form-control" rows="4" placeholder="Type your text here..."></textarea>
+                        </div>
+                        <div class="text-center mb-4">
+                            <button onclick="translateText()" class="btn btn-primary btn-lg px-5">
+                                <i class="bi bi-arrow-right-circle me-2"></i>Translate
+                            </button>
+                        </div>
+                        <div id="result" class="result-box" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample translations database (static)
+        const translations = {
+            'karai_to_english': {
+                'Kara': 'Hi',
+                'Usai': 'Hello',
+                'Taimako': 'Help',
+                'Guye': 'Run',
+                'La': 'Who',
+                'Yasi': 'Fire'
+            },
+            'english_to_karai': {
+                'Hi': 'Kara',
+                'Hello': 'Usai',
+                'Help': 'Taimako',
+                'Run': 'Guye',
+                'Who': 'La',
+                'Fire': 'Yasi'
+            }
+        };
+
+        function switchLanguages() {
+            const karaiToEnglish = document.getElementById('karai_to_english');
+            const englishToKarai = document.getElementById('english_to_karai');
+            const inputLabel = document.getElementById('inputLabel');
+            const inputText = document.getElementById('inputText');
+            
+            if (karaiToEnglish.checked) {
+                englishToKarai.checked = true;
+                inputLabel.textContent = 'Enter English Text:';
+                inputText.placeholder = 'Type your English text here...';
+            } else {
+                karaiToEnglish.checked = true;
+                inputLabel.textContent = 'Enter Karai-Karai Text:';
+                inputText.placeholder = 'Type your Karai-Karai text here...';
+            }
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function translateText() {
+            const inputText = document.getElementById('inputText').value.trim();
+            const resultDiv = document.getElementById('result');
+            const direction = document.querySelector('input[name="direction"]:checked').value;
+            
+            if (!inputText) {
+                resultDiv.innerHTML = '<div class="alert alert-warning"><i class="bi bi-exclamation-triangle me-2"></i>Please enter some text to translate.</div>';
+                resultDiv.style.display = 'block';
+                return;
+            }
+            
+            const translation = translations[direction][inputText];
+            const fromLang = direction === 'karai_to_english' ? 'Karai-Karai' : 'English';
+            const toLang = direction === 'karai_to_english' ? 'English' : 'Karai-Karai';
+            
+            if (translation) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <h6><i class="bi bi-check-circle me-2"></i>Translation Result:</h6>
+                        <div class="fs-5 fw-semibold text-success">${translation}</div>
+                        <small class="text-muted">Translated from ${fromLang} to ${toLang}</small>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>No translation found</strong><br>
+                        <small>The text "${inputText}" is not in our database.</small>
+                    </div>
+                `;
+            }
+            resultDiv.style.display = 'block';
+        }
+
+        // Radio button change handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[name="direction"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const inputLabel = document.getElementById('inputLabel');
+                    const inputText = document.getElementById('inputText');
+                    
+                    if (this.value === 'karai_to_english') {
+                        inputLabel.textContent = 'Enter Karai-Karai Text:';
+                        inputText.placeholder = 'Type your Karai-Karai text here...';
+                    } else {
+                        inputLabel.textContent = 'Enter English Text:';
+                        inputText.placeholder = 'Type your English text here...';
+                    }
+                    document.getElementById('result').style.display = 'none';
+                });
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
