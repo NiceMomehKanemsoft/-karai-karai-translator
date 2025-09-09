@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karai-Karai Translator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/png">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-translate me-2"></i>Karai-Karai Translator
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/admin/login">
+                    <i class="bi bi-person-gear me-1"></i>Admin
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-gradient text-white text-center">
+                        <h4 class="mb-0"><i class="bi bi-chat-text me-2"></i>Language Translator</h4>
+                        <p class="mb-0 mt-2" style="font-size: 14px;">Bidirectional Translation: Karai-Karai ⇄ English</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="translator-form">
+                            <div class="mb-3 scroll-animate">
+                                <div class="d-flex justify-content-center mb-3">
+                                    <div class="btn-group" role="group">
+                                        <input type="radio" class="btn-check" name="direction" id="karai_to_english" value="karai_to_english" checked>
+                                        <label class="btn btn-outline-primary" for="karai_to_english">
+                                            <i class="bi bi-translate me-1"></i>Karai → English
+                                        </label>
+                                        
+                                        <button type="button" class="btn btn-primary" onclick="switchLanguages()" title="Switch Languages">
+                                            <i class="bi bi-arrow-left-right"></i>
+                                        </button>
+                                        
+                                        <input type="radio" class="btn-check" name="direction" id="english_to_karai" value="english_to_karai">
+                                        <label class="btn btn-outline-primary" for="english_to_karai">
+                                            <i class="bi bi-translate me-1"></i>English → Karai
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4 scroll-animate">
+                                <label for="inputText" class="form-label fw-semibold" id="inputLabel">Enter Karai-Karai Text:</label>
+                                <textarea id="inputText" class="form-control glow" rows="4" placeholder="Type your Karai-Karai text here... (Press Enter to translate)"></textarea>
+                            </div>
+                            <div class="text-center mb-4 scroll-animate">
+                                <button onclick="translateText()" class="btn btn-primary btn-lg px-5 btn-pulse">
+                                    <i class="bi bi-arrow-right-circle me-2"></i>Translate
+                                </button>
+                            </div>
+                            <div id="result" class="result-box scroll-animate"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light mt-5 py-4">
+        <div class="container text-center">
+            <p class="text-muted mb-0" style="font-size: 14px;">&copy; 2025 Karai-Karai Translator. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
